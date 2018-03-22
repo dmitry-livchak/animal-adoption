@@ -1,0 +1,13 @@
+service: animal-adoption
+provider:
+  name: aws
+  runtime: nodejs6.10
+plugins:
+  - serverless-mocha-plugin
+functions:
+  getAnimals:
+    handler: handler.getAnimals
+    events:
+      - http:
+          path: animals
+          method: get
