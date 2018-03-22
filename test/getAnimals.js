@@ -12,9 +12,9 @@ describe('getAnimals', () => {
     done();
   });
 
-  it('implement tests here', () => {
+  it('Responds with HTTP OK', () => {
     return wrapped.run({}).then((response) => {
-      expect(response).to.not.be.empty;
+      expect(response.statusCode).to.be.equal(200);
     });
   });
 });
