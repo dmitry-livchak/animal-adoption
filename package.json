@@ -3,17 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "mocha": "^5.0.4",
+    "nock": "^9.2.3",
     "serverless-mocha-plugin": "^1.7.0"
   },
   "scripts": {
     "test": "sls invoke test",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint . --fix"
   },
   "author": "Dmitry Livchak",
   "license": "ISC"
