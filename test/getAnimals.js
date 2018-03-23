@@ -111,35 +111,72 @@ describe('getAnimals', () => {
     });
   });
 
-  it('Orders dogs by age descending', () => {
-    mockEndpoints({
-      cats: 'empty',
-      hamsters: 'empty',
-      dogs: {
-        body: [
-          {
-            forename: 'Middle',
-            surname: 'Dog',
-            dateOfBirth: '2015-01-01',
-          },
-          {
-            forename: 'Younger',
-            surname: 'Dog',
-            dateOfBirth: '2017-01-01',
-          }, {
-            forename: 'Older',
-            surname: 'Dog',
-            dateOfBirth: '2014-01-01',
-          },
-        ],
-      },
+
+    it('Shows dogs first, then cats, then hamsters', () => {
+      mockEndpoints({
+        cats: {
+          body: [
+            {
+              forename: 'Second',
+              surname: 'Cat'
+            },
+          ],
+        },
+        hamsters: {
+          body: [
+            {
+              forename: 'Third',
+              surname: 'Hamster'
+            },
+          ],
+        },
+        dogs: {
+          body: [
+            {
+              forename: 'First',
+              surname: 'Dog'
+            },
+          ],
+        },
+      });
+      return wrapped.run({}).then((response) => {
+        const { animals } = JSON.parse(response.body);
+        expect(animals.map(dog => dog.fullName)).to.deep.equal([
+          'First Dog',
+          'Second Cat',
+          'Third Hamster']);
+      });
     });
-    return wrapped.run({}).then((response) => {
-      const { animals } = JSON.parse(response.body);
-      expect(animals.map(dog => dog.fullName)).to.deep.equal([
-        'Older Dog',
-        'Middle Dog',
-        'Younger Dog']);
-    });
-  });
+
+      it('Orders dogs by age descending', () => {
+        mockEndpoints({
+          cats: 'empty',
+          hamsters: 'empty',
+          dogs: {
+            body: [
+              {
+                forename: 'Middle',
+                surname: 'Dog',
+                dateOfBirth: '2015-01-01',
+              },
+              {
+                forename: 'Younger',
+                surname: 'Dog',
+                dateOfBirth: '2017-01-01',
+              }, {
+                forename: 'Older',
+                surname: 'Dog',
+                dateOfBirth: '2014-01-01',
+              },
+            ],
+          },
+        });
+        return wrapped.run({}).then((response) => {
+          const { animals } = JSON.parse(response.body);
+          expect(animals.map(dog => dog.fullName)).to.deep.equal([
+            'Older Dog',
+            'Middle Dog',
+            'Younger Dog']);
+        });
+      });
 });
