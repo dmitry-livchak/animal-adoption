@@ -166,6 +166,39 @@ const mockEndpoints = (options = 'empty') => {
       paging: null,
     });
   }
+  if (options === 'partial') {
+    cats.replyWithError('Cats failed to load');
+    dogs.reply(500, 'Dogs returned HTTP 500');
+    hamsters.reply(200, {
+      body: [
+        {
+          forename: 'Felix',
+          surname: 'Hamilton',
+          dateOfBirth: '2015-04-02',
+          image: {
+            url: 'https://blueprint-api-production.s3.amazonaws.com/uploads/story/thumbnail/51167/5ee9a826-a4f5-4301-9068-1a4f6eb6fbed.jpg',
+          },
+        },
+        {
+          forename: 'Gwendolyn',
+          surname: 'Roy',
+          dateOfBirth: '2016-05-23',
+          image: {
+            url: 'https://i.ytimg.com/vi/xkxjNZComZg/maxresdefault.jpg',
+          },
+        },
+        {
+          forename: 'Lorenzo',
+          surname: 'Parsons',
+          dateOfBirth: '2014-08-25',
+          image: {
+            url: 'https://www.peta.org/wp-content/uploads/2016/09/hamster-602x401.jpg',
+          },
+        },
+      ],
+      paging: null,
+    });
+  }
 };
 
 describe('getAnimals', () => {
@@ -192,6 +225,14 @@ describe('getAnimals', () => {
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals.length).to.be.equal(15);
+    });
+  });
+
+  it('Returns animals when partial data available', () => {
+    mockEndpoints('partial');
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals.length).to.be.equal(3);
     });
   });
 });
