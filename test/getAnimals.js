@@ -199,6 +199,11 @@ const mockEndpoints = (options = 'empty') => {
       paging: null,
     });
   }
+  if (options === 'all-fail') {
+    cats.replyWithError('Cats failed to load');
+    dogs.reply(500, 'Dogs returned HTTP 500');
+    hamsters.reply(502, 'Bad Gateway');
+  }
 };
 
 describe('getAnimals', () => {
@@ -233,6 +238,13 @@ describe('getAnimals', () => {
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals.length).to.be.equal(3);
+    });
+  });
+
+  it('Fails when all downstream API fail', () => {
+    mockEndpoints('all-fail');
+    return wrapped.run({}).then((response) => {
+      expect(response.statusCode).to.be.equal(500);
     });
   });
 });
