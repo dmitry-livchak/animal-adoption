@@ -50,4 +50,23 @@ describe('getAnimals', () => {
       expect(response.statusCode).to.be.equal(500);
     });
   });
+
+  it('Outputs full name', () => {
+    mockEndpoints({
+      cats: 'fail',
+      dogs: 'fail',
+      hamsters: {
+        body: [
+          {
+            forename: 'Felix',
+            surname: 'Hamilton',
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals[0].fullName).to.be.equal('Felix Hamilton');
+    });
+  });
 });

@@ -1,6 +1,6 @@
 const nock = require('nock');
 
-module.exports.mockEndpoints = (options = {}) => {
+module.exports.mockEndpoints = (options = { cats: 'empty', dogs: 'empty', hamsters: 'empty' }) => {
   const apiEndpoint = nock('https://apigateway.test.lifeworks.com/rescue-shelter-api');
   const cats = apiEndpoint.get('/cats');
   const dogs = apiEndpoint.get('/dogs');
@@ -74,15 +74,16 @@ module.exports.mockEndpoints = (options = {}) => {
             },
           },
         ],
-        paging: null,
       });
       break;
     case 'fail':
       cats.replyWithError('Cats failed to load');
       break;
     case 'empty':
+      cats.reply(200, { body: [] });
+      break;
     default:
-      cats.reply(200, {});
+      cats.reply(200, options.cats);
       break;
   }
 
@@ -131,15 +132,16 @@ module.exports.mockEndpoints = (options = {}) => {
             },
           },
         ],
-        paging: null,
       });
       break;
     case 'fail':
       dogs.reply(500, 'Dogs returned HTTP 500');
       break;
     case 'empty':
+      dogs.reply(200, { body: [] });
+      break;
     default:
-      dogs.reply(200, {});
+      dogs.reply(200, options.dogs);
       break;
   }
 
@@ -172,15 +174,16 @@ module.exports.mockEndpoints = (options = {}) => {
             },
           },
         ],
-        paging: null,
       });
       break;
     case 'fail':
       hamsters.reply(502, 'Bad Gateway');
       break;
     case 'empty':
+      hamsters.reply(200, { body: [] });
+      break;
     default:
-      hamsters.reply(200, {});
+      hamsters.reply(200, options.hamsters);
       break;
   }
 
