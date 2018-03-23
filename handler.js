@@ -6,7 +6,7 @@ module.exports.getAnimals = (event, context, callback) => {
   const dogs = request(`${apiUrl}/dogs`).then(value => JSON.parse(value).body);
   const hamsters = request(`${apiUrl}/hamsters`).then(value => JSON.parse(value).body);
 
-  Promise.all([cats, dogs, hamsters].map(p => p.catch(e => ({ error: e }))))
+  Promise.all([dogs, cats, hamsters].map(p => p.catch(e => ({ error: e }))))
     .then((values) => {
       let response;
       const errors = values.filter(value => value && value.error);
