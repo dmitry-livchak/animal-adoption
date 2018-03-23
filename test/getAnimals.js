@@ -179,4 +179,36 @@ describe('getAnimals', () => {
         'Younger Dog']);
     });
   });
+
+  it('Orders hamsters by age ascending', () => {
+    mockEndpoints({
+      cats: 'empty',
+      dogs: 'empty',
+      hamsters: {
+        body: [
+          {
+            forename: 'Middle',
+            surname: 'Hamster',
+            dateOfBirth: '2015-01-01',
+          },
+          {
+            forename: 'Younger',
+            surname: 'Hamster',
+            dateOfBirth: '2017-01-01',
+          }, {
+            forename: 'Older',
+            surname: 'Hamster',
+            dateOfBirth: '2014-01-01',
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals.map(hamster => hamster.fullName)).to.deep.equal([
+        'Younger Hamster',
+        'Middle Hamster',
+        'Older Hamster']);
+    });
+  });
 });
