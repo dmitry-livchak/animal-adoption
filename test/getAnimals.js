@@ -180,26 +180,45 @@ describe('getAnimals', () => {
     });
   });
 
-
-  it('Show ginger cats first, then black, then any other', () => {
+  it('Show cats ordered by age (descending) within their colour group', () => {
     mockEndpoints({
       hamsters: 'empty',
       dogs: 'empty',
       cats: {
         body: [
           {
-            forename: 'Purple',
-            surname: 'Third',
+            forename: 'Other',
+            surname: 'Younger',
             colour: 'purple',
+            dateOfBirth: '2017-01-01',
           },
           {
             forename: 'Ginger',
-            surname: 'First',
+            surname: 'Younger',
             colour: 'ginger',
+            dateOfBirth: '2016-01-01',
           }, {
             forename: 'Black',
-            surname: 'Second',
+            surname: 'Younger',
             colour: 'black',
+            dateOfBirth: '2015-01-01',
+          },
+          {
+            forename: 'Other',
+            surname: 'Older',
+            colour: 'magenta',
+            dateOfBirth: '2014-01-01',
+          },
+          {
+            forename: 'Ginger',
+            surname: 'Older',
+            colour: 'ginger',
+            dateOfBirth: '2013-01-01',
+          }, {
+            forename: 'Black',
+            surname: 'Older',
+            colour: 'black',
+            dateOfBirth: '2012-01-01',
           },
         ],
       },
@@ -207,9 +226,12 @@ describe('getAnimals', () => {
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals.map(hamster => hamster.fullName)).to.deep.equal([
-        'Ginger First',
-        'Black Second',
-        'Purple Third']);
+        'Ginger Older',
+        'Ginger Younger',
+        'Black Older',
+        'Black Younger',
+        'Other Older',
+        'Other Younger']);
     });
   });
 

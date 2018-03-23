@@ -22,7 +22,7 @@ module.exports.getAnimals = (event, context, callback) => {
             colour: cat.colour,
             colourOrder: getColourOrder(cat.colour),
           })),
-        ['colourOrder'], ['asc'],
+        ['colourOrder', 'dateOfBirth'], ['asc', 'asc'],
       ));
   const dogs = request(`${apiUrl}/dogs`)
     .then(value => _.orderBy(JSON.parse(value).body, ['dateOfBirth'], 'asc'));
