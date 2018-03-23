@@ -29,7 +29,7 @@ describe('getAnimals', () => {
   });
 
   it('Returns all animals', () => {
-    mockEndpoints('full');
+    mockEndpoints({ cats: 'full', dogs: 'full', hamsters: 'full' });
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals.length).to.be.equal(15);
@@ -37,7 +37,7 @@ describe('getAnimals', () => {
   });
 
   it('Returns animals when partial data available', () => {
-    mockEndpoints('partial');
+    mockEndpoints({ cats: 'fail', dogs: 'fail', hamsters: 'full' });
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals.length).to.be.equal(3);
@@ -45,7 +45,7 @@ describe('getAnimals', () => {
   });
 
   it('Fails when all downstream API fail', () => {
-    mockEndpoints('all-fail');
+    mockEndpoints({ cats: 'fail', dogs: 'fail', hamsters: 'fail' });
     return wrapped.run({}).then((response) => {
       expect(response.statusCode).to.be.equal(500);
     });
