@@ -4,6 +4,7 @@
 
 const mochaPlugin = require('serverless-mocha-plugin');
 const nock = require('nock');
+const mockdate = require('mockdate');
 const { mockEndpoints } = require('./getAnimals.data');
 
 const { expect } = mochaPlugin.chai;
@@ -53,8 +54,8 @@ describe('getAnimals', () => {
 
   it('Outputs full name', () => {
     mockEndpoints({
-      cats: 'fail',
-      dogs: 'fail',
+      cats: 'empty',
+      dogs: 'empty',
       hamsters: {
         body: [
           {
@@ -67,6 +68,78 @@ describe('getAnimals', () => {
     return wrapped.run({}).then((response) => {
       const { animals } = JSON.parse(response.body);
       expect(animals[0].fullName).to.be.equal('Felix Hamilton');
+    });
+  });
+
+  it('Outputs image URL', () => {
+    mockEndpoints({
+      cats: 'empty',
+      dogs: 'empty',
+      hamsters: {
+        body: [
+          {
+            image: {
+              url: 'https://some.url',
+            },
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals[0].image.url).to.be.equal('https://some.url');
+    });
+  });
+
+  it('Outputs age in years and months', () => {
+    mockdate.set('2018-02-23');
+    mockEndpoints({
+      cats: 'empty',
+      dogs: 'empty',
+      hamsters: {
+        body: [
+          {
+            dateOfBirth: '2015-04-02',
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      mockdate.reset();
+      expect(animals[0].age).to.deep.equal({ years: 2, months: 10 });
+    });
+  });
+
+  it('Orders dogs by age descending', () => {
+    mockEndpoints({
+      cats: 'empty',
+      hamsters: 'empty',
+      dogs: {
+        body: [
+          {
+            forename: 'Middle',
+            surname: 'Dog',
+            dateOfBirth: '2015-01-01',
+          },
+          {
+            forename: 'Younger',
+            surname: 'Dog',
+            dateOfBirth: '2014-01-01',
+          }, {
+            forename: 'Older',
+            surname: 'Dog',
+            dateOfBirth: '2016-01-01',
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals.map(dog => dog.fullName)).to.deep.equal([
+        'Older Dog',
+        'Middle Dog',
+        'Younger Dog']);
     });
   });
 });
