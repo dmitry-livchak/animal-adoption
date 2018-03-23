@@ -180,6 +180,39 @@ describe('getAnimals', () => {
     });
   });
 
+
+  it('Show ginger cats first, then black, then any other', () => {
+    mockEndpoints({
+      hamsters: 'empty',
+      dogs: 'empty',
+      cats: {
+        body: [
+          {
+            forename: 'Purple',
+            surname: 'Third',
+            colour: 'purple',
+          },
+          {
+            forename: 'Ginger',
+            surname: 'First',
+            colour: 'ginger',
+          }, {
+            forename: 'Black',
+            surname: 'Second',
+            colour: 'black',
+          },
+        ],
+      },
+    });
+    return wrapped.run({}).then((response) => {
+      const { animals } = JSON.parse(response.body);
+      expect(animals.map(hamster => hamster.fullName)).to.deep.equal([
+        'Ginger First',
+        'Black Second',
+        'Purple Third']);
+    });
+  });
+
   it('Orders hamsters by age ascending', () => {
     mockEndpoints({
       cats: 'empty',
