@@ -6,7 +6,7 @@ module.exports.getAnimals = (event, context, callback) => {
   const cats = request(`${apiUrl}/cats`).then(value => JSON.parse(value).body);
   const dogs = request(`${apiUrl}/dogs`)
     .then(value => JSON.parse(value).body
-      .sort((a, b) => (new Date(b.dateOfBirth) - new Date(a.dateOfBirth))));
+      .sort((a, b) => (new Date(a.dateOfBirth) - new Date(b.dateOfBirth))));
   const hamsters = request(`${apiUrl}/hamsters`).then(value => JSON.parse(value).body);
 
   const formatAnimal = (animal) => {

@@ -125,11 +125,11 @@ describe('getAnimals', () => {
           {
             forename: 'Younger',
             surname: 'Dog',
-            dateOfBirth: '2014-01-01',
+            dateOfBirth: '2017-01-01',
           }, {
             forename: 'Older',
             surname: 'Dog',
-            dateOfBirth: '2016-01-01',
+            dateOfBirth: '2014-01-01',
           },
         ],
       },
