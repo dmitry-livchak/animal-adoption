@@ -1,5 +1,5 @@
 const requests = require('./requests');
-const formatResponse = require('./formatResponse');
+const responseMapper = require('./responseMapper');
 
 module.exports.getAnimals = (event, context, callback) => {
   Promise.all([requests.dogs(), requests.cats(), requests.hamsters()]
@@ -13,7 +13,7 @@ module.exports.getAnimals = (event, context, callback) => {
           statusCode: 200,
           body: JSON.stringify({
             animals: [].concat(...values.filter(value => !(value && value.error)))
-              .map(animal => formatResponse.formatAnimal(animal)),
+              .map(responseMapper.mapAnimal),
           }),
         };
       } else {

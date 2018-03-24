@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const formatAnimal = (animal) => {
+const mapAnimal = (animal) => {
   const ageYears = moment().diff(animal.dateOfBirth, 'years');
   const ageMonths = moment().diff(animal.dateOfBirth, 'months') - (ageYears * 12);
   return {
@@ -10,4 +10,4 @@ const formatAnimal = (animal) => {
   };
 };
 
-module.exports = { formatAnimal };
+module.exports = { mapAnimal };
