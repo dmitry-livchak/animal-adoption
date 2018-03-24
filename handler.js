@@ -12,18 +12,15 @@ module.exports.getAnimals = (event, context, callback) => {
   };
   const cats = request(`${apiUrl}/cats`)
     .then(value =>
-      _.orderBy(
-        JSON.parse(value).body
-          .map(cat => ({
-            forename: cat.forename,
-            surname: cat.surname,
-            dateOfBirth: cat.dateOfBirth,
-            image: cat.image,
-            colour: cat.colour,
-            colourOrder: getColourOrder(cat.colour),
-          })),
-        ['colourOrder', 'dateOfBirth'], ['asc', 'asc'],
-      ));
+      _.orderBy(JSON.parse(value).body
+        .map(cat => ({
+          forename: cat.forename,
+          surname: cat.surname,
+          dateOfBirth: cat.dateOfBirth,
+          image: cat.image,
+          colour: cat.colour,
+          colourOrder: getColourOrder(cat.colour),
+        })), ['colourOrder', 'dateOfBirth'], ['asc', 'asc']));
   const dogs = request(`${apiUrl}/dogs`)
     .then(value => _.orderBy(JSON.parse(value).body, ['dateOfBirth'], 'asc'));
   const hamsters = request(`${apiUrl}/hamsters`)
