@@ -7,7 +7,8 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "request": "^2.85.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -20,8 +21,11 @@
   },
   "scripts": {
     "test": "sls invoke test",
-    "lint": "./node_modules/.bin/eslint . --fix"
+    "lint": "./node_modules/.bin/eslint . --fix",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Dmitry Livchak",
-  "license": "ISC"
+  "license": "ISC",
+  "snyk": true
 }
